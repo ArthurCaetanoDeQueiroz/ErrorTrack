@@ -1,8 +1,6 @@
--- create_database.sql
--- Creates the project database and an example users table
 
-CREATE DATABASE IF NOT EXISTS nome_do_projeto;
-USE nome_do_projeto;
+CREATE DATABASE IF NOT EXISTS ErrorTrack;
+USE ErrorTrack;
 
 CREATE TABLE IF NOT EXISTS users (
   id INT PRIMARY KEY AUTO_INCREMENT,
