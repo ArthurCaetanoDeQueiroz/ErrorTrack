@@ -1,0 +1,2 @@
+-- SQL script to create the database schema for ErrorTrack
+-- Add your table definitions here.
