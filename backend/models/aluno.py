@@ -1,13 +1,12 @@
-from flask import Flask, jsonify, request, render_template, send_from_directory, redirect, url_for
 from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime
- 
+
 db = SQLAlchemy()
- 
- 
-class aluno(db.Model):
+
+
+class Aluno(db.Model):
     __tablename__ = 'aluno'
- 
+
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     name = db.Column(db.String(255), nullable=False)
     materia = db.Column(db.String(255), nullable=False)
