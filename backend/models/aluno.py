@@ -1,8 +1,8 @@
-from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime
+from flask_sqlalchemy import SQLAlchemy
+from extensions import db
 
 db = SQLAlchemy()
-
 
 class Aluno(db.Model):
     __tablename__ = 'aluno'
@@ -11,15 +11,30 @@ class Aluno(db.Model):
     name = db.Column(db.String(255), nullable=False)
     materia = db.Column(db.String(255), nullable=False)
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
- 
+
     def salvar(self):
         db.session.add(self)
         db.session.commit()
- 
+
+    def atualizar(self, name=None, materia=None):
+        if name:
+            self.name = name
+        if materia:
+            self.materia = materia
+        db.session.commit()
+
     def deletar(self):
         db.session.delete(self)
         db.session.commit()
- 
+
+    @classmethod
+    def listar_todos(cls):
+        return cls.query.all()
+
+    @classmethod
+    def buscar_por_id(cls, id_aluno):
+        return cls.query.get(id_aluno)
+
     def to_dict(self):
         return {
             'id': self.id,
@@ -27,6 +42,3 @@ class Aluno(db.Model):
             'materia': self.materia,
             'created_at': self.created_at.isoformat() if self.created_at else None
         }
- 
-    def __repr__(self):
-        return f'<Aluno {self.id} - {self.name}>'

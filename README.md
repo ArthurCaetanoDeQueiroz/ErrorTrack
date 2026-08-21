@@ -52,3 +52,15 @@ GET /questoes -> Lista as questões (aceita ?simulado_id=1).
 POST /questoes -> Cadastra uma questão.
 
 GET /questoes/relatorio-erros/<aluno_id> -> Gera relatório de erros.
+
+
+Cadastrar Aluno (Tela -> API -> AlunoController -> CadastrarAlunoService -> Aluno Model -> MySQL)
+Listar Todos os Alunos (Tela -> API -> AlunoController -> ListarAlunosService -> Aluno Model -> MySQL)
+Buscar Aluno por ID (Tela -> API -> AlunoController -> BuscarAlunoPorIdService -> Aluno Model -> MySQL)
+Atualizar Aluno (Tela -> API -> AlunoController -> AtualizarAlunoService -> Aluno Model -> MySQL)
+Excluir Aluno (Tela -> API -> AlunoController -> ExcluirAlunoService -> Aluno Model -> MySQL)
+Buscar Alunos por Nome (Tela -> API -> AlunoController -> BuscarAlunosPorNomeService -> AlunoRepository -> Stored Procedure)
+Cadastrar Questão (Tela -> API -> QuestaoController -> CadastrarQuestaoService -> Questao Model -> MySQL)
+Listar Todas as Questões (Tela -> API -> QuestaoController -> ListarQuestoesService -> Questao Model -> MySQL)
+Buscar Questões por Simulado (Tela -> API -> QuestaoController -> BuscarQuestoesPorSimuladoService -> QuestaoRepository -> Stored Procedure)
+Gerar Relatório de Erros por Aluno (Tela -> API -> QuestaoController -> RelatorioErrosService -> QuestaoRepository -> Stored Procedure)
