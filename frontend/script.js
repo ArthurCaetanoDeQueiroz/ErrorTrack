@@ -1,3 +1,4 @@
+// --- CÓDIGO ORIGINAL QUE JÁ ESTAVA NO SEU ARQUIVO (NÃO APAGAR) ---
 const barra = document.querySelector('.barra');
 const mudar = document.querySelector('.barramudar');
 const alunoForm = document.getElementById('alunoForm');
@@ -182,3 +183,135 @@ function renderizarLista(alunos) {
 }
 
 listarAlunos();
+
+// Buscar Aluno por Nome (Stored Procedure)
+const buscarNomeForm = document.getElementById('buscarNomeForm');
+if (buscarNomeForm) {
+  buscarNomeForm.addEventListener('submit', async (event) => {
+    event.preventDefault();
+    const nome = document.getElementById('buscarNome').value.trim();
+    if (!nome) {
+      listarAlunos();
+      return;
+    }
+    const response = await fetch(`/alunos?nome=${encodeURIComponent(nome)}`);
+    if (response.ok) {
+      const alunos = await response.json();
+      renderizarLista(alunos);
+    }
+  });
+}
+
+// Questões e Relatórios
+const questaoForm = document.getElementById('questaoForm');
+const buscarSimuladoForm = document.getElementById('buscarSimuladoForm');
+const btnListarQuestoes = document.getElementById('btnListarQuestoes');
+const listaQuestoes = document.getElementById('listaQuestoes');
+
+if (questaoForm) {
+  questaoForm.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const enunciado = document.getElementById('enunciado').value;
+    const materia = document.getElementById('materia') ? document.getElementById('materia').value : '';
+    const alternativa_correta = document.getElementById('alternativaCorreta').value;
+
+    const res = await fetch('/questoes', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ enunciado, materia, alternativa_correta })
+    });
+
+    if (res.ok) {
+      mostrarMensagem('Questão criada com sucesso!', 'sucesso');
+      questaoForm.reset();
+      carregarQuestoes();
+    } else {
+      mostrarMensagem('Erro ao criar questão.', 'erro');
+    }
+  });
+}
+
+async function carregarQuestoes(termo = '') {
+  let url = '/questoes';
+  if (termo) {
+    url += `?busca=${encodeURIComponent(termo)}`;
+  }
+  const res = await fetch(url);
+  const dados = await res.json();
+  
+  if (listaQuestoes) {
+    if (Array.isArray(dados)) {
+      listaQuestoes.innerHTML = dados.map(q => `
+        <div class="questao-item" style="border: 1px solid #ccc; padding: 10px; margin-bottom: 5px;">
+          <strong>ID:</strong> ${q.id}<br>
+          <strong>Matéria:</strong> ${q.materia || 'Não informada'}<br>
+          <strong>Enunciado:</strong> ${q.enunciado}<br>
+          <strong>Correta:</strong> ${q.alternativa_correta}
+        </div>
+      `).join('') || '<p>Nenhuma questão encontrada.</p>';
+    } else {
+      listaQuestoes.innerHTML = `<pre>${JSON.stringify(dados, null, 2)}</pre>`;
+    }
+  }
+}
+
+if (btnListarQuestoes) {
+  btnListarQuestoes.addEventListener('click', () => {
+    carregarQuestoes();
+  });
+}
+
+if (buscarSimuladoForm) {
+  buscarSimuladoForm.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const id = document.getElementById('buscarSimuladoId').value.trim();
+    
+    if (!id) {
+      carregarQuestoes();
+      return;
+    }
+
+    const res = await fetch(`/questoes/${id}`);
+    if (res.ok) {
+      const q = await res.json();
+      listaQuestoes.innerHTML = `
+        <div class="questao-item" style="border: 1px solid #ccc; padding: 10px; margin-bottom: 5px;">
+          <strong>ID:</strong> ${q.id}<br>
+          <strong>Matéria:</strong> ${q.materia || 'Não informada'}<br>
+          <strong>Enunciado:</strong> ${q.enunciado}<br>
+          <strong>Correta:</strong> ${q.alternativa_correta}
+        </div>
+      `;
+    } else {
+      listaQuestoes.innerHTML = '<p>Questão não encontrada com esse ID.</p>';
+    }
+  });
+}
+
+const relatorioForm = document.getElementById('relatorioForm');
+const listaRelatorio = document.getElementById('listaRelatorio');
+
+if (relatorioForm) {
+  relatorioForm.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const id = document.getElementById('relatorioAlunoId').value.trim();
+    
+    if (!id) {
+      listaRelatorio.innerHTML = '<p>Digite o ID do aluno.</p>';
+      return;
+    }
+
+    try {
+      const res = await fetch(`/questoes/relatorio-erros/${id}`);
+      const dados = await res.json();
+      
+      if (res.ok) {
+        listaRelatorio.innerHTML = `<pre>${JSON.stringify(dados, null, 2)}</pre>`;
+      } else {
+        listaRelatorio.innerHTML = `<p>Erro: ${dados.error || 'Não foi possível gerar o relatório.'}</p>`;
+      }
+    } catch (err) {
+      listaRelatorio.innerHTML = '<p>Erro de conexão com o servidor.</p>';
+    }
+  });
+}

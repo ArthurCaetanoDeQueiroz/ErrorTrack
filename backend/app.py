@@ -12,7 +12,7 @@ from routes import register_routes
 frontend_dir = os.path.abspath(os.path.join(root_dir, '..', 'frontend'))
 
 app = Flask(__name__, static_folder=frontend_dir, static_url_path='')
-app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://root:@localhost/ErrorTrack'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///errortrack.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 db.init_app(app)

@@ -1,3 +1,5 @@
+from extensions import db
+
 class MotorIa:
     def __init__(self, prompt, id=None):
         self.id = id

@@ -1,8 +1,5 @@
 from datetime import datetime
-from flask_sqlalchemy import SQLAlchemy
 from extensions import db
-
-db = SQLAlchemy()
 
 class Aluno(db.Model):
     __tablename__ = 'aluno'

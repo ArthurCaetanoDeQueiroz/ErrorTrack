@@ -1,8 +1,8 @@
-from database.connection import get_db_connection
+from extensions import db
 
 class QuestaoRepository:
     def buscar_questoes_por_simulado_procedure(self, simulado_id):
-        conn = get_db_connection()
+        conn = db()
         cursor = conn.cursor(dictionary=True)
         cursor.callproc('sp_buscar_questoes_por_simulado', [simulado_id])
         resultados = []
@@ -13,7 +13,7 @@ class QuestaoRepository:
         return resultados
 
     def gerar_relatorio_erros_procedure(self, aluno_id):
-        conn = get_db_connection()
+        conn = db()
         cursor = conn.cursor(dictionary=True)
         cursor.callproc('sp_gerar_relatorio_erros', [aluno_id])
         resultados = []

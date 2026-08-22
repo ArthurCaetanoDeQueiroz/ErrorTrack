@@ -1,3 +1,5 @@
+from extensions import db
+
 class MapaErro:
     def __init__(self, id=None):
         self.id = id

@@ -1,3 +1,5 @@
+from extensions import db
+
 class Simulado:
     def __init__(self, aula_id, id=None):
         self.id = id

@@ -1,3 +1,5 @@
+from extensions import db
+
 class Aula:
     def __init__(self, data, tema, id=None):
         self.id = id
